@@ -1,9 +1,9 @@
-# Agendash
+# Agendash with pagination
 [![Build Status](https://travis-ci.org/agenda/agendash.svg)](https://travis-ci.org/agenda/agendash)
 <a href="https://slackin-ekwifvcwbr.now.sh/"><img src="https://slackin-ekwifvcwbr.now.sh/badge.svg" alt="Slack Status"></a>
 [![Known Vulnerabilities](https://snyk.io/test/github/agenda/agendash/badge.svg?targetFile=package.json)](https://snyk.io/test/github/agenda/agendash?targetFile=package.json)
 
-A Dashboard for [Agenda](https://github.com/agenda/agenda)
+A Dashboard for [Agenda](https://github.com/agenda/agenda) 
 
 ---
 
@@ -14,10 +14,11 @@ A Dashboard for [Agenda](https://github.com/agenda/agenda)
 - Dive in to see more details about the job, like the json data
 - Requeue a job (clone the data and run immediately)
 - Delete jobs (Useful for cleaning up old completed jobs)
+- Pagination
 
 ### Notes
 
- - Automatically creates additional indexes on several columns (See #24).
+ - This project has extended the original [Agendash](https://github.com/agenda/agendash) to include pagination
 
 ---
 

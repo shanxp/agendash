@@ -23,6 +23,10 @@ A Dashboard for [Agenda](https://github.com/agenda/agenda)
 
 ### Screenshots
 
+![Pagination](pagination.png)
+
+---
+
 ![Auto-refresh list of jobs](all-jobs.png)
 
 ---
@@ -34,7 +38,7 @@ A Dashboard for [Agenda](https://github.com/agenda/agenda)
 ### Install
 
 ```
-npm install --save agendash
+npm install --save agendash-pagination
 ```
 
 *Note*: `Agendash` requires mongodb version >2.6.0 to perform the needed aggregate queries. This is your mongo database version, not your node package version! To check your database version, connect to mongo and run `db.version()`.
@@ -72,7 +76,7 @@ var app = express();
 // ... your other express middleware like body-parser
 
 var Agenda = require('agenda');
-var Agendash = require('agendash');
+var Agendash = require('agendash-pagination');
 
 var agenda = new Agenda({db: {address: 'mongodb://127.0.0.1/agendaDb'}});
 // or provide your own mongo client:

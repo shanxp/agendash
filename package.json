@@ -1,6 +1,6 @@
 {
   "name": "agendash-pagination",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Agenda Dashboard with Pagination",
   "main": "app.js",
   "bin": "bin/agendash-standalone.js",
@@ -13,7 +13,10 @@
     "ava": "ava"
   },
   "keywords": [
-    "agenda"
+    "agenda",
+    "agendash",
+    "pagination",
+    "queue"
   ],
   "repository": {
     "type": "git",

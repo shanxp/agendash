@@ -92,3 +92,19 @@
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
 }
+
+#per-page-block{
+  width:75px; 
+  float:left;
+}
+
+#pagination-container {
+  width:225px;
+  padding-left:25px;
+}
+
+#pagination-block {
+  width:120px; 
+  float:left;
+  padding-left:10px;
+}

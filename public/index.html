@@ -22,7 +22,7 @@
           </div>
           <div class="form-group">
             <label for="overviewFilter">Refresh interval (seconds)</label>
-            <input type="number" value="2" class="refresh-interval form-control">
+            <input type="number" value="20000" class="refresh-interval form-control">
           </div>
         </div>
         <div id="job-overview-list"></div>
@@ -32,13 +32,47 @@
           <div class="page-header">
             <h2 id="active-title">
               <span class="active-job"></span>
+              <span class="active-total"></span>
               <small class="active-state"></small>
             </h2>
             <ul id="select-jobs" class="nav nav-pills">
               <li role="presentation"><a role="button" data-action="schedule-job">Schedule job</a></li>
               <li role="presentation"><a role="button" data-action="select-all">Select all</a></li>
               <li role="presentation"><a role="button" data-action="select-none">Select none</a></li>
+              
+              <li>
+                <div id="pagination-container" > </div>                
+              </li>
             </ul>
+
+            <script type="text/html" id="tmpl-pagination">
+              <div id="per-page-block" >
+                <select class="form-control" id="per-page-selector">
+                  <% for(var item of items){ %>
+                    <% if (itemsPerPage == item) { %>
+                      <option value=<%= item %> selected><a href="#" class="page"> <%= item %></a></option>
+                    <% } else { %>
+                      <option value=<%= item %> ><a href="#" class="page"> <%= item %></a></option>
+                    <% } %>
+                  <% }%>
+                </select>
+              </div>
+
+              <div id="pagination-block">
+                <select class="form-control" id="pagination-selector">
+                    <% for(p=1;p<=totalPages;p++){ %>
+                      <% if (currentPage == p) { %>
+                        <option value=<%= p %> selected><a href="#" class="page">Page <%= p %></a></option>
+                      <% } else { %>
+                        <option value=<%= p %> ><a href="#" class="page">Page <%= p %></a></option>
+                      <% } %>
+                    <% }%>
+                </select>
+              </div>
+
+             </script>           
+
+
             <div class="clearfix"></div>
           </div>
           <div class="table-responsive">

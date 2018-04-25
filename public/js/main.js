@@ -2,7 +2,7 @@
 $(function () {
   var CurrentRequestModel = Backbone.Model.extend({
     defaults: {
-      refreshInterval: 2000,
+      refreshInterval: 200000,
       overviewFilterRegex: /.*/
     }
   })
@@ -50,7 +50,8 @@ $(function () {
     handleClick: function (e) {
       App.trigger('requestChange', {
         job: this.model.get('_id'),
-        state: $(e.currentTarget).data('state')
+        state: $(e.currentTarget).data('state'),
+        currentPage:1
       })
     },
     render: function () {
@@ -323,6 +324,58 @@ $(function () {
     }
   })
 
+  var PaginationModel = Backbone.Model.extend({
+    defaults: {
+      items: [10,20,50,100,200],
+      total: 1,
+      totalPages: 1,
+      currentPage: 1,
+      lastPage:1,
+      itemsPerPage: 5 
+    }
+  });
+
+  var PaginationView = Backbone.View.extend({
+    model: PaginationModel,
+    el: '#pagination-container',
+    template: _.template($('#tmpl-pagination').html()),
+    initialize: function (options) {
+      this.currentRequest = options.currentRequest
+      _.bindAll(this, 'render','handleChange','handlePerPageChange')
+    },
+    events: {
+      'change #pagination-selector': 'handleChange',
+      'change #per-page-selector' : 'handlePerPageChange'
+    },
+    handleChange: function (e) {
+        this.model.set('currentPage', e.target.value )
+        App.trigger('requestChange', {
+          job: this.currentRequest.get('job'),
+          state: this.currentRequest.get('state'),
+          total: this.model.get('total'),
+          totalPages: this.model.get('totalPages'),
+          currentPage: this.model.get('currentPage'),
+          itemsPerPage: this.model.get('itemsPerPage')
+        })        
+    },
+    handlePerPageChange: function (e) {
+      this.model.set('itemsPerPage', e.target.value )
+      App.trigger('requestChange', {
+        job: this.currentRequest.get('job'),
+        state: this.currentRequest.get('state'),
+        total: this.model.get('total'),
+        totalPages: this.model.get('totalPages'),
+        currentPage: this.model.get('currentPage'),
+        itemsPerPage: this.model.get('itemsPerPage')
+      })        
+      this.render();
+    },
+    render: function () {
+      this.$el.html( this.template( this.model.toJSON()));
+      return this
+    }
+  })
+
   var AppView = Backbone.View.extend({
     el: '#app',
     initialize: function () {
@@ -363,6 +416,9 @@ $(function () {
       this.createJobPaneView = new CreateJobPaneView({
       })
 
+      //Pagination
+      this.paginationModel = new PaginationModel();
+
       this.listenTo(this, 'requestChange', this.handleRequestChange)
       this.listenTo(this, 'showJobDetails', this.handleShowJobDetails)
       this.listenTo(this, 'refreshData', this.fetchData)
@@ -381,7 +437,11 @@ $(function () {
       this._fetchTimeout && clearTimeout(this._fetchTimeout)
       this._fetchRequest = $.get('api', {
         job: this.currentRequest.get('job'),
-        state: this.currentRequest.get('state')
+        state: this.currentRequest.get('state'),
+        total: this.currentRequest.get('total'),
+        totalPages: this.currentRequest.get('totalPages'),
+        currentPage: this.currentRequest.get('currentPage'),
+        itemsPerPage: this.currentRequest.get('itemsPerPage')
       }).success(this.resultsFetched)
     },
     resultsFetched: function (results) {
@@ -390,6 +450,23 @@ $(function () {
         job: results.currentRequest.job,
         state: results.currentRequest.state
       })
+
+      var paginationObj = {
+        total: results.currentRequest.total,
+        totalPages: results.currentRequest.totalPages,
+        currentPage: results.currentRequest.currentPage,
+        lastPage: results.currentRequest.totalPages,
+        itemsPerPage: results.currentRequest.itemsPerPage
+      }
+      this.paginationModel.set(paginationObj);
+      this.paginationView = new PaginationView({
+        model: this.paginationModel,
+        currentRequest: this.currentRequest
+      })
+      
+      this.paginationView.render();
+
+
       this.render(results)
       this.jobItems.set(results.jobs)
       this._fetchTimeout = setTimeout(this.fetchData, this.currentRequest.get('refreshInterval'))
